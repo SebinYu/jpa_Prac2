@@ -16,7 +16,4 @@ public class Department {
     String name;
     String shortName;
     String phone;
-
-    @OneToMany(mappedBy="department")
-    List<Student> students;
 }

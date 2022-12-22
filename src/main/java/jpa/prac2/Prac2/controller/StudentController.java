@@ -5,63 +5,56 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import jpa.prac2.Prac2.entity.Department;
 import jpa.prac2.Prac2.entity.Student;
 import jpa.prac2.Prac2.repository.DepartmentRepository;
 import jpa.prac2.Prac2.repository.StudentRepository;
 
-@Controller
-@RequestMapping("/student")
+@RestController
 public class StudentController {
 
     @Autowired StudentRepository studentRepository;
-    @Autowired DepartmentRepository departmentRepository;
 
-    @RequestMapping("list")
-    public String list(Model model) {
-        List<Student> students = studentRepository.findAll();
-        model.addAttribute("students", students);
-        return "student/list";
+    @RequestMapping("student/test1")
+    public Student test1() {
+        return studentRepository.findByStudentNo("201732008");
     }
 
-    @GetMapping("create")
-    public String create(Model model) {
-        Student student = new Student();
-        List<Department> departments = departmentRepository.findAll();
-        model.addAttribute("student", student);
-        model.addAttribute("departments", departments);
-        return "student/edit";
+    @RequestMapping("student/test2")
+    public List<Student> test2() {
+        return studentRepository.findByName("김영수");
     }
 
-    @PostMapping("create")
-    public String create(Model model, Student student) {
-        studentRepository.save(student);
-        return "redirect:list";
+    @RequestMapping("student/test3")
+    public List<Student> test3() {
+        return studentRepository.findByNameStartsWith("김");
     }
 
-    @GetMapping("edit")
-    public String edit(Model model, @RequestParam("id") int id) {
-        Student student = studentRepository.findById(id).get();
-        List<Department> departments = departmentRepository.findAll();
-        model.addAttribute("student", student);
-        model.addAttribute("departments", departments);
-        return "student/edit";
+    @RequestMapping("student/test4")
+    public List<Student> test4() {
+        return studentRepository.findByDepartmentName("소프트웨어공학과");
     }
 
-    @PostMapping("edit")
-    public String edit(Model model, Student student) {
-        studentRepository.save(student);
-        return "redirect:list";
+    @RequestMapping("student/test5")
+    public List<Student> test5() {
+        return studentRepository.findByDepartmentNameStartsWith("소프");
     }
 
-    @RequestMapping("delete")
-    public String delete(Model model, @RequestParam("id") int id) {
-        studentRepository.deleteById(id);
-        return "redirect:list";
+    @RequestMapping("student/test6")
+    public List<Student> test6() {
+        return studentRepository.findByOrderByName();
     }
+
+    @RequestMapping("student/test7")
+    public List<Student> test7() {
+        return studentRepository.findByOrderByNameDesc();
+    }
+
+    @RequestMapping("student/test8")
+    public List<Student> test8() {
+        return studentRepository.findByDepartmentIdOrderByNameDesc(1);
+    }
+
 }
